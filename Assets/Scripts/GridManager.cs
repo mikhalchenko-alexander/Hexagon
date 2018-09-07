@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 
 public class GridManager : MonoBehaviour {
@@ -7,26 +8,25 @@ public class GridManager : MonoBehaviour {
 	[SerializeField] private Grid _grid;
 
 	private Tilemap _board;
+	private List<Vector3Int> boardTilesPositionsXY = new List<Vector3Int>();
 	
 	void Start () {
-		BuildBoard();
+		InitializeBoard();
 	}
 
-	private void BuildBoard() {
+	private void InitializeBoard() {
 		var tilemaps = _grid.GetComponentsInChildren<Tilemap>();
-		foreach (var tilemap in tilemaps) {
-			if (tilemap.name == "Board") {
-				_board = tilemap;
+		foreach (var tileMap in tilemaps) {
+			if (tileMap.name == "Board") {
+				_board = tileMap;
 			}
 		}
 
 		_board.CompressBounds();
 
-		List<Vector3Int> boardTilesPositionsXY = new List<Vector3Int>();
-
 		foreach (var position in _board.cellBounds.allPositionsWithin) {
 			if (_board.GetTile(position) != null) {
-				boardTilesPositionsXY.Add(position);
+				boardTilesPositionsXY.Add(CoordinateUtils.OffsetToAxial(position));
 			}
 		}
 	}
