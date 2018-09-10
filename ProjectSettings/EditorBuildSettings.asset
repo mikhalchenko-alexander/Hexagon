@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/Game.unity
+    path: Assets/Scenes/HexagonBoard.unity
     guid: 43cd232c1c16f408db15bc14c480fccc
+  - enabled: 1
+    path: Assets/Scenes/RectangleBoard.unity
+    guid: 83a78d5b8237f451ea40982263535456
   m_configObjects: {}
