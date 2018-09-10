@@ -16,8 +16,7 @@ public class Gem : MonoBehaviour {
 	private SpriteRenderer _bgRenderer;
 	private SpriteRenderer _gemRenderer;
 	
-	// Use this for initialization
-	void Start () {
+	void Awake () {
 		_glowRenderer = FindRenderer("Glow");
 		_bgRenderer = FindRenderer("Background");
 		_gemRenderer = FindRenderer("Gem");
@@ -30,7 +29,6 @@ public class Gem : MonoBehaviour {
 	private float time = 0;
 	private bool red = true;
 	
-	// Update is called once per frame
 	void Update () {
 		time += Time.deltaTime;
 
@@ -42,15 +40,24 @@ public class Gem : MonoBehaviour {
 
 	private void Flip() {
 		if (red) {
-			_glowRenderer.sprite = _gemGlowBlue;
-			_bgRenderer.sprite = _gemBgBlue;
-			_gemRenderer.sprite = _gemBlue;
-			red = false;
+			SetBlue();
 		} else {
-			_glowRenderer.sprite = _gemGlowRed;
-			_bgRenderer.sprite = _gemBgRed;
-			_gemRenderer.sprite = _gemRed;
-			red = true;
+			SetRed();
 		}
 	}
+
+	public void SetRed() {
+		_glowRenderer.sprite = _gemGlowRed;
+		_bgRenderer.sprite = _gemBgRed;
+		_gemRenderer.sprite = _gemRed;
+		red = true;
+	}
+	
+	public void SetBlue() {
+		_glowRenderer.sprite = _gemGlowBlue;
+		_bgRenderer.sprite = _gemBgBlue;
+		_gemRenderer.sprite = _gemBlue;
+		red = false;
+	}
+
 }

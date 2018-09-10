@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class GemPlacementManager : MonoBehaviour {
+public class GemPlacementManager : Singleton<GemPlacementManager> {
 	
 	[SerializeField] private Tilemap _tilemap;
 
