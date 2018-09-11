@@ -7,7 +7,6 @@ using UnityEngine.Tilemaps;
 public class GridManager : Singleton<GridManager> {
 
 	[SerializeField] private Grid _grid;
-	[SerializeField] private Gem gem;
 	[SerializeField] private TileBase _hexTile;
 	[SerializeField] private TileBase _borderHexTile;
 	[SerializeField] private TileBase _blueBorderHexTile;
@@ -16,8 +15,6 @@ public class GridManager : Singleton<GridManager> {
 	[SerializeField] private TileBase _blueGemTile;
 
 	private List<Vector3Int> _boardTilesPositionsXy = new List<Vector3Int>();
-	private List<Vector3Int> _startingPointsRed = new List<Vector3Int>();
-	private List<Vector3Int> _startingPointsBlue = new List<Vector3Int>();
 	private Tilemap _board;
 
 	public Tilemap Board {
@@ -26,7 +23,6 @@ public class GridManager : Singleton<GridManager> {
 
 	void Start () {
 		ReadBoard();
-		ReadStartingPoints();
 		SpawnStartingGems();
 	}
 
@@ -46,20 +42,6 @@ public class GridManager : Singleton<GridManager> {
 
 	public void DeselectTile(Vector3Int pos) {
 		_board.SetTile(pos, _hexTile);
-	}
-
-	private void SpawnStartingGems() {
-		foreach (var pos in _startingPointsRed) {
-			var redGem = Instantiate(gem);
-			redGem.SetRed();
-			GemPlacementManager.Instance.PutGem(redGem, pos);
-		}
-		
-		foreach (var pos in _startingPointsBlue) {
-			var blueGem = Instantiate(gem);
-			blueGem.SetBlue();
-			GemPlacementManager.Instance.PutGem(blueGem, pos);
-		}
 	}
 
 	private void ReadBoard() {
@@ -84,7 +66,7 @@ public class GridManager : Singleton<GridManager> {
 		}
 	}
 	
-	private void ReadStartingPoints() {
+	private void SpawnStartingGems() {
 		var tilemaps = _grid.GetComponentsInChildren<Tilemap>();
 		Tilemap startingPoints = null;
 		foreach (var tileMap in tilemaps) {
@@ -100,11 +82,13 @@ public class GridManager : Singleton<GridManager> {
 		startingPoints.CompressBounds();
 
 		foreach (var position in startingPoints.cellBounds.allPositionsWithin) {
+			var axialPos = CoordinateUtils.OffsetToAxial(position);
+			
 			if (startingPoints.GetTile(position) == _redGemTile) {
-				_startingPointsRed.Add(CoordinateUtils.OffsetToAxial(position));
+				GemPlacementManager.Instance.PutGem(GemType.Red, axialPos);
 			}
 			if (startingPoints.GetTile(position) == _blueGemTile) {
-				_startingPointsBlue.Add(CoordinateUtils.OffsetToAxial(position));
+				GemPlacementManager.Instance.PutGem(GemType.Blue, axialPos);
 			}
 		}
 		

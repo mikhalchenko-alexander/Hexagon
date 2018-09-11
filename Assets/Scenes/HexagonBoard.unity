@@ -882,6 +882,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tilemap: {fileID: 972960366}
+  _gemPrefab: {fileID: 2113676875}
 --- !u!4 &1039613066
 Transform:
   m_ObjectHideFlags: 0
@@ -1350,7 +1351,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _grid: {fileID: 1510334335}
-  gem: {fileID: 2113676875}
   _hexTile: {fileID: 11400000, guid: 596ff30f9b2ec49b8b05a70984e465cc, type: 2}
   _borderHexTile: {fileID: 11400000, guid: 917923f17b48642cd8ea25a14861ad5c, type: 2}
   _blueBorderHexTile: {fileID: 11400000, guid: 5f74ff569ac5d41299c3808dac42b8a5, type: 2}
