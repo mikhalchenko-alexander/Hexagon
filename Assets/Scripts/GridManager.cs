@@ -1,23 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 
-public class GridManager : MonoBehaviour {
+public class GridManager : Singleton<GridManager> {
 
 	[SerializeField] private Grid _grid;
 	[SerializeField] private Gem gem;
+	[SerializeField] private TileBase _hexTile;
+	[SerializeField] private TileBase _borderHexTile;
+	[SerializeField] private TileBase _blueBorderHexTile;
+	[SerializeField] private TileBase _redBorderHexTile;
 	[SerializeField] private TileBase _redGemTile;
 	[SerializeField] private TileBase _blueGemTile;
 
 	private List<Vector3Int> _boardTilesPositionsXy = new List<Vector3Int>();
 	private List<Vector3Int> _startingPointsRed = new List<Vector3Int>();
 	private List<Vector3Int> _startingPointsBlue = new List<Vector3Int>();
-	
+	private Tilemap _board;
+
+	public Tilemap Board {
+		get { return _board; }
+	}
+
 	void Start () {
 		ReadBoard();
 		ReadStartingPoints();
 		SpawnStartingGems();
+	}
+
+	public void SelectTile(Vector3Int pos, GemType gemType) {
+		switch (gemType) {
+			case GemType.Blue:
+				_board.SetTile(pos, _blueBorderHexTile);
+				break;
+			case GemType.Red:
+				_board.SetTile(pos, _redBorderHexTile);
+				break;
+			case GemType.None:
+				_board.SetTile(pos, _borderHexTile);
+				break;
+		}
+	}
+
+	public void DeselectTile(Vector3Int pos) {
+		_board.SetTile(pos, _hexTile);
 	}
 
 	private void SpawnStartingGems() {
@@ -36,21 +64,21 @@ public class GridManager : MonoBehaviour {
 
 	private void ReadBoard() {
 		var tilemaps = _grid.GetComponentsInChildren<Tilemap>();
-		Tilemap board = null;
 		foreach (var tileMap in tilemaps) {
 			if (tileMap.name == "Board") {
-				board = tileMap;
+				_board = tileMap;
+				break;
 			}
 		}
 		
-		if (board == null) {
+		if (_board == null) {
 			throw new Exception("No Board tilemap found");
 		}
 
-		board.CompressBounds();
+		_board.CompressBounds();
 
-		foreach (var position in board.cellBounds.allPositionsWithin) {
-			if (board.GetTile(position) != null) {
+		foreach (var position in _board.cellBounds.allPositionsWithin) {
+			if (_board.GetTile(position) != null) {
 				_boardTilesPositionsXy.Add(CoordinateUtils.OffsetToAxial(position));
 			}
 		}

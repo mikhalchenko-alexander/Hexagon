@@ -2,6 +2,10 @@
 using System.Linq;
 using UnityEngine;
 
+public enum GemType {
+	Blue, Red, None
+}
+
 public class Gem : MonoBehaviour {
 
 	[SerializeField] private Sprite _gemGlowRed;
