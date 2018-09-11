@@ -12,7 +12,7 @@ public class InputManager : MonoBehaviour {
  
 			if (tile != null)
 			{
-				GridManager.Instance.SelectTile(tilePosition, GemType.Blue);
+				GameManager.Instance.TileClicked(CoordinateUtils.OffsetToAxial(tilePosition));
 			}
 		}
 	}

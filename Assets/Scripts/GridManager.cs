@@ -26,16 +26,18 @@ public class GridManager : Singleton<GridManager> {
 		SpawnStartingGems();
 	}
 
-	public void SelectTile(Vector3Int pos, GemType gemType) {
+	public void SelectTile(Vector3Int axialCoordinates, GemType gemType) {
+		var offsetCoordinates = CoordinateUtils.AxialToOffset(axialCoordinates);
+		
 		switch (gemType) {
 			case GemType.Blue:
-				_board.SetTile(pos, _blueBorderHexTile);
+				_board.SetTile(offsetCoordinates, _blueBorderHexTile);
 				break;
 			case GemType.Red:
-				_board.SetTile(pos, _redBorderHexTile);
+				_board.SetTile(offsetCoordinates, _redBorderHexTile);
 				break;
 			case GemType.None:
-				_board.SetTile(pos, _borderHexTile);
+				_board.SetTile(offsetCoordinates, _borderHexTile);
 				break;
 		}
 	}
