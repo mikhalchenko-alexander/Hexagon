@@ -14,7 +14,7 @@ public class GridManager : Singleton<GridManager> {
 	[SerializeField] private TileBase _redGemTile;
 	[SerializeField] private TileBase _blueGemTile;
 
-	private List<Vector3Int> _boardTilesPositionsXy = new List<Vector3Int>();
+	private List<Vector3Int> _boardTilesAxialCoordinates = new List<Vector3Int>();
 	private Tilemap _board;
 
 	public Tilemap Board {
@@ -42,8 +42,8 @@ public class GridManager : Singleton<GridManager> {
 		}
 	}
 
-	public void DeselectTile(Vector3Int pos) {
-		_board.SetTile(pos, _hexTile);
+	public void DeselectTile(Vector3Int axialCoordinates) {
+		_board.SetTile(CoordinateUtils.AxialToOffset(axialCoordinates), _hexTile);
 	}
 
 	private void ReadBoard() {
@@ -63,7 +63,7 @@ public class GridManager : Singleton<GridManager> {
 
 		foreach (var position in _board.cellBounds.allPositionsWithin) {
 			if (_board.GetTile(position) != null) {
-				_boardTilesPositionsXy.Add(CoordinateUtils.OffsetToAxial(position));
+				_boardTilesAxialCoordinates.Add(CoordinateUtils.OffsetToAxial(position));
 			}
 		}
 	}
@@ -95,5 +95,11 @@ public class GridManager : Singleton<GridManager> {
 		}
 		
 		Destroy(startingPoints.gameObject);
+	}
+
+	public void DeselectAllTiles() {
+		foreach (var axialCoord in _boardTilesAxialCoordinates) {
+			DeselectTile(axialCoord);
+		}
 	}
 }

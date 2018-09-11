@@ -52,7 +52,10 @@ public class GameManager : Singleton<GameManager> {
 	}
 
 	public void TileClicked(Vector3Int axialCoordinates) {
-		GridManager.Instance.SelectTile(axialCoordinates, _currentPlayer);
-		SwitchPlayer();
+		if (GemPlacementManager.Instance.GemTypeAt(axialCoordinates) == _currentPlayer) {
+			GridManager.Instance.DeselectAllTiles();
+			GridManager.Instance.SelectTile(axialCoordinates, _currentPlayer);
+			SwitchPlayer();
+		}
 	}
 }

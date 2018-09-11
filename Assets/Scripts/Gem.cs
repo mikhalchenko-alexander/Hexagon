@@ -30,26 +30,8 @@ public class Gem : MonoBehaviour {
 		return GetComponentsInChildren<SpriteRenderer>().First(go => go.name.Equals(rendererName));
 	}
 
-	private float _time;
 	private GemType _gemType = GemType.None;
 	
-	void Update () {
-		_time += Time.deltaTime;
-
-		if (_time > 1) {
-			Flip();
-			_time = 0;
-		}
-	}
-
-	private void Flip() {
-		if (_gemType == GemType.Red) {
-			SetBlue();
-		} else if (_gemType == GemType.Blue) {
-			SetRed();
-		}
-	}
-
 	public void SetRed() {
 		_glowRenderer.sprite = _gemGlowRed;
 		_bgRenderer.sprite = _gemBgRed;
