@@ -9,6 +9,7 @@ public class GemPlacementManager : Singleton<GemPlacementManager> {
 	[SerializeField] private Gem _gemPrefab;
 
 	private Dictionary<Vector3Int, GemType> _gems = new Dictionary<Vector3Int, GemType>();
+	private Dictionary<Vector3Int, Gem> _gemInstances = new Dictionary<Vector3Int, Gem>();
 	
 	public void PutGem(GemType gemType, Vector3Int cubeCoordinates) {
 		var offsetCoords = CoordinateUtils.CubeToOffset(cubeCoordinates);
@@ -28,9 +29,16 @@ public class GemPlacementManager : Singleton<GemPlacementManager> {
 		
 		gem.transform.position = _tilemap.GetCellCenterWorld(offsetCoords);
 		_gems[cubeCoordinates] = gemType;
+		_gemInstances[cubeCoordinates] = gem;
+	}
+	
+	public void RemoveGem(Vector3Int cubeCoordinates) {
+		_gems.Remove(cubeCoordinates);
+		Destroy(_gemInstances[cubeCoordinates].gameObject);
 	}
 
 	public GemType GemTypeAt(Vector3Int cubeCoordinates) {
 		return _gems.ContainsKey(cubeCoordinates) ? _gems[cubeCoordinates] : GemType.None;
 	}
+
 }
