@@ -15,7 +15,7 @@ public class GridManager : Singleton<GridManager> {
 	[SerializeField] private TileBase _redGemTile;
 	[SerializeField] private TileBase _blueGemTile;
 
-	private List<Vector3Int> _boardTilesAxialCoordinates = new List<Vector3Int>();
+	private List<Vector3Int> _boardTilesCubeCoordinates = new List<Vector3Int>();
 	private Tilemap _board;
 
 	public Tilemap Board {
@@ -27,34 +27,34 @@ public class GridManager : Singleton<GridManager> {
 		SpawnStartingGems();
 	}
 
-	public void SelectGemTile(Vector3Int axialCoordinates, GemType gemType) {
+	public void SelectGemTile(Vector3Int cubeCoordinates, GemType gemType) {
 		switch (gemType) {
 			case GemType.Blue:
-				SetTile(axialCoordinates, _blueBorderHexTile);
+				SetTile(cubeCoordinates, _blueBorderHexTile);
 				break;
 			case GemType.Red:
-				SetTile(axialCoordinates, _redBorderHexTile);
+				SetTile(cubeCoordinates, _redBorderHexTile);
 				break;
 		}
 
-		var neighbours = CoordinateUtils.Neighbours(axialCoordinates).Where(BoardContains).ToList();
-		foreach (var axialCoord in neighbours) {
-			SetTile(axialCoord, _borderHexTile);
+		var neighbours = CoordinateUtils.Neighbours(cubeCoordinates).Where(BoardContains).ToList();
+		foreach (var cubeCoord in neighbours) {
+			SetTile(cubeCoord, _borderHexTile);
 		}
 	}
 
-	private void SetTile(Vector3Int axialCoordinates, TileBase hexTile) {
-		var offsetCoordinates = CoordinateUtils.AxialToOffset(axialCoordinates);
+	private void SetTile(Vector3Int cubeCoordinates, TileBase hexTile) {
+		var offsetCoordinates = CoordinateUtils.CubeToOffset(cubeCoordinates);
 		_board.SetTile(offsetCoordinates, hexTile);
 	}
 
-	private bool BoardContains(Vector3Int axialCoordinates) {
-		return _boardTilesAxialCoordinates.Exists(c =>
-			c.x == axialCoordinates.x && c.y == axialCoordinates.y && c.z == axialCoordinates.z);
+	private bool BoardContains(Vector3Int cubeCoordinates) {
+		return _boardTilesCubeCoordinates.Exists(c =>
+			c.x == cubeCoordinates.x && c.y == cubeCoordinates.y && c.z == cubeCoordinates.z);
 	}
 	
-	public void DeselectTile(Vector3Int axialCoordinates) {
-		_board.SetTile(CoordinateUtils.AxialToOffset(axialCoordinates), _hexTile);
+	public void DeselectTile(Vector3Int cubeCoordinates) {
+		_board.SetTile(CoordinateUtils.CubeToOffset(cubeCoordinates), _hexTile);
 	}
 
 	private void ReadBoard() {
@@ -74,7 +74,7 @@ public class GridManager : Singleton<GridManager> {
 
 		foreach (var position in _board.cellBounds.allPositionsWithin) {
 			if (_board.GetTile(position) != null) {
-				_boardTilesAxialCoordinates.Add(CoordinateUtils.OffsetToAxial(position));
+				_boardTilesCubeCoordinates.Add(CoordinateUtils.OffsetToCube(position));
 			}
 		}
 	}
@@ -95,13 +95,13 @@ public class GridManager : Singleton<GridManager> {
 		startingPoints.CompressBounds();
 
 		foreach (var position in startingPoints.cellBounds.allPositionsWithin) {
-			var axialPos = CoordinateUtils.OffsetToAxial(position);
+			var cubeCoord = CoordinateUtils.OffsetToCube(position);
 			
 			if (startingPoints.GetTile(position) == _redGemTile) {
-				GemPlacementManager.Instance.PutGem(GemType.Red, axialPos);
+				GemPlacementManager.Instance.PutGem(GemType.Red, cubeCoord);
 			}
 			if (startingPoints.GetTile(position) == _blueGemTile) {
-				GemPlacementManager.Instance.PutGem(GemType.Blue, axialPos);
+				GemPlacementManager.Instance.PutGem(GemType.Blue, cubeCoord);
 			}
 		}
 		
@@ -109,8 +109,8 @@ public class GridManager : Singleton<GridManager> {
 	}
 
 	public void DeselectAllTiles() {
-		foreach (var axialCoord in _boardTilesAxialCoordinates) {
-			DeselectTile(axialCoord);
+		foreach (var cubeCoordinates in _boardTilesCubeCoordinates) {
+			DeselectTile(cubeCoordinates);
 		}
 	}
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CoordinateUtils {
 
-	public static Vector3Int OffsetToAxial(Vector3Int offset) {
+	public static Vector3Int OffsetToCube(Vector3Int offset) {
 		var x = offset.y;
 		var z = -offset.x - (offset.y + (offset.y & 1)) / 2;
 		var y = -offset.y - z;
@@ -11,20 +11,20 @@ public class CoordinateUtils {
 		return new Vector3Int(x, y, z);
 	}
 
-	public static Vector3Int AxialToOffset(Vector3Int axial) {
-		var y = axial.x;
-		var x = axial.z + (axial.x + (axial.x & 1)) / 2;
+	public static Vector3Int CubeToOffset(Vector3Int cube) {
+		var y = cube.x;
+		var x = cube.z + (cube.x + (cube.x & 1)) / 2;
 		return new Vector3Int(-x, y, 0);
 	}
 
-	public static List<Vector3Int> Neighbours(Vector3Int axialCoordinates) {
+	public static List<Vector3Int> Neighbours(Vector3Int cubeCoordinates) {
 		var result = new List<Vector3Int> {
-			new Vector3Int(axialCoordinates.x + 1, axialCoordinates.y - 1, axialCoordinates.z),
-			new Vector3Int(axialCoordinates.x - 1, axialCoordinates.y + 1, axialCoordinates.z),
-			new Vector3Int(axialCoordinates.x, axialCoordinates.y + 1, axialCoordinates.z - 1),
-			new Vector3Int(axialCoordinates.x, axialCoordinates.y - 1, axialCoordinates.z + 1),
-			new Vector3Int(axialCoordinates.x + 1, axialCoordinates.y, axialCoordinates.z - 1),
-			new Vector3Int(axialCoordinates.x - 1, axialCoordinates.y, axialCoordinates.z + 1)
+			new Vector3Int(cubeCoordinates.x + 1, cubeCoordinates.y - 1, cubeCoordinates.z),
+			new Vector3Int(cubeCoordinates.x - 1, cubeCoordinates.y + 1, cubeCoordinates.z),
+			new Vector3Int(cubeCoordinates.x, cubeCoordinates.y + 1, cubeCoordinates.z - 1),
+			new Vector3Int(cubeCoordinates.x, cubeCoordinates.y - 1, cubeCoordinates.z + 1),
+			new Vector3Int(cubeCoordinates.x + 1, cubeCoordinates.y, cubeCoordinates.z - 1),
+			new Vector3Int(cubeCoordinates.x - 1, cubeCoordinates.y, cubeCoordinates.z + 1)
 		};
 		return result;
 	}

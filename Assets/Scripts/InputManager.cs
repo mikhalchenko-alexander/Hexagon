@@ -12,7 +12,7 @@ public class InputManager : MonoBehaviour {
  
 			if (tile != null)
 			{
-				GameManager.Instance.TileClicked(CoordinateUtils.OffsetToAxial(tilePosition));
+				GameManager.Instance.TileClicked(CoordinateUtils.OffsetToCube(tilePosition));
 			}
 		}
 	}

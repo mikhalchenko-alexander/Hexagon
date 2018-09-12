@@ -51,10 +51,10 @@ public class GameManager : Singleton<GameManager> {
 		}
 	}
 
-	public void TileClicked(Vector3Int axialCoordinates) {
-		if (GemPlacementManager.Instance.GemTypeAt(axialCoordinates) == _currentPlayer) {
+	public void TileClicked(Vector3Int cubeCoordinates) {
+		if (GemPlacementManager.Instance.GemTypeAt(cubeCoordinates) == _currentPlayer) {
 			GridManager.Instance.DeselectAllTiles();
-			GridManager.Instance.SelectGemTile(axialCoordinates, _currentPlayer);
+			GridManager.Instance.SelectGemTile(cubeCoordinates, _currentPlayer);
 			SwitchPlayer();
 		}
 	}

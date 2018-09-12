@@ -10,8 +10,8 @@ public class GemPlacementManager : Singleton<GemPlacementManager> {
 
 	private Dictionary<Vector3Int, GemType> _gems = new Dictionary<Vector3Int, GemType>();
 	
-	public void PutGem(GemType gemType, Vector3Int axialCoordinates) {
-		var offsetCoords = CoordinateUtils.AxialToOffset(axialCoordinates);
+	public void PutGem(GemType gemType, Vector3Int cubeCoordinates) {
+		var offsetCoords = CoordinateUtils.CubeToOffset(cubeCoordinates);
 		
 		var gem = Instantiate(_gemPrefab);
 
@@ -27,10 +27,10 @@ public class GemPlacementManager : Singleton<GemPlacementManager> {
 		}
 		
 		gem.transform.position = _tilemap.GetCellCenterWorld(offsetCoords);
-		_gems[axialCoordinates] = gemType;
+		_gems[cubeCoordinates] = gemType;
 	}
 
-	public GemType GemTypeAt(Vector3Int axialCoordinates) {
-		return _gems.ContainsKey(axialCoordinates) ? _gems[axialCoordinates] : GemType.None;
+	public GemType GemTypeAt(Vector3Int cubeCoordinates) {
+		return _gems.ContainsKey(cubeCoordinates) ? _gems[cubeCoordinates] : GemType.None;
 	}
 }
