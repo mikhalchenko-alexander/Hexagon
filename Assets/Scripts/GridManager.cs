@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
@@ -26,22 +27,32 @@ public class GridManager : Singleton<GridManager> {
 		SpawnStartingGems();
 	}
 
-	public void SelectTile(Vector3Int axialCoordinates, GemType gemType) {
-		var offsetCoordinates = CoordinateUtils.AxialToOffset(axialCoordinates);
-		
+	public void SelectGemTile(Vector3Int axialCoordinates, GemType gemType) {
 		switch (gemType) {
 			case GemType.Blue:
-				_board.SetTile(offsetCoordinates, _blueBorderHexTile);
+				SetTile(axialCoordinates, _blueBorderHexTile);
 				break;
 			case GemType.Red:
-				_board.SetTile(offsetCoordinates, _redBorderHexTile);
+				SetTile(axialCoordinates, _redBorderHexTile);
 				break;
-			case GemType.None:
-				_board.SetTile(offsetCoordinates, _borderHexTile);
-				break;
+		}
+
+		var neighbours = CoordinateUtils.Neighbours(axialCoordinates).Where(BoardContains).ToList();
+		foreach (var axialCoord in neighbours) {
+			SetTile(axialCoord, _borderHexTile);
 		}
 	}
 
+	private void SetTile(Vector3Int axialCoordinates, TileBase hexTile) {
+		var offsetCoordinates = CoordinateUtils.AxialToOffset(axialCoordinates);
+		_board.SetTile(offsetCoordinates, hexTile);
+	}
+
+	private bool BoardContains(Vector3Int axialCoordinates) {
+		return _boardTilesAxialCoordinates.Exists(c =>
+			c.x == axialCoordinates.x && c.y == axialCoordinates.y && c.z == axialCoordinates.z);
+	}
+	
 	public void DeselectTile(Vector3Int axialCoordinates) {
 		_board.SetTile(CoordinateUtils.AxialToOffset(axialCoordinates), _hexTile);
 	}

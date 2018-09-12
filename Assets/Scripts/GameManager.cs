@@ -54,7 +54,7 @@ public class GameManager : Singleton<GameManager> {
 	public void TileClicked(Vector3Int axialCoordinates) {
 		if (GemPlacementManager.Instance.GemTypeAt(axialCoordinates) == _currentPlayer) {
 			GridManager.Instance.DeselectAllTiles();
-			GridManager.Instance.SelectTile(axialCoordinates, _currentPlayer);
+			GridManager.Instance.SelectGemTile(axialCoordinates, _currentPlayer);
 			SwitchPlayer();
 		}
 	}
