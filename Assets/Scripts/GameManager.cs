@@ -79,14 +79,16 @@ public class GameManager : Singleton<GameManager> {
 	}
 
 	private void DoJumpMove(Vector3Int from, Vector3Int to) {
+		GridManager.Instance.DeselectAllTiles();
 		GemPlacementManager.Instance.RemoveGem(from);
 		GemPlacementManager.Instance.PutGem(CurrentPlayer, to);
-		GridManager.Instance.DeselectAllTiles();
 		SwitchPlayer();
 	}
 
 	private void DoSplitMove(Vector3Int from, Vector3Int to) {
-		throw new NotImplementedException();
+		GridManager.Instance.DeselectAllTiles();
+		GemPlacementManager.Instance.PutGem(CurrentPlayer, to);
+		SwitchPlayer();
 	}
 
 	private bool CurrentPlayerCanMoveTo(Vector3Int from, Vector3Int to) {
