@@ -37,7 +37,7 @@ public class GridManager : Singleton<GridManager> {
 				break;
 		}
 
-		var neighbours = CoordinateUtils.Neighbours(cubeCoordinates).Where(BoardContains).ToList();
+		var neighbours = CoordinateUtils.Neighbours(cubeCoordinates).Where(_boardTilesCubeCoordinates.Contains).ToList();
 		foreach (var cubeCoord in neighbours) {
 			SetTile(cubeCoord, _borderHexTile);
 		}
@@ -46,11 +46,6 @@ public class GridManager : Singleton<GridManager> {
 	private void SetTile(Vector3Int cubeCoordinates, TileBase hexTile) {
 		var offsetCoordinates = CoordinateUtils.CubeToOffset(cubeCoordinates);
 		_board.SetTile(offsetCoordinates, hexTile);
-	}
-
-	private bool BoardContains(Vector3Int cubeCoordinates) {
-		return _boardTilesCubeCoordinates.Exists(c =>
-			c.x == cubeCoordinates.x && c.y == cubeCoordinates.y && c.z == cubeCoordinates.z);
 	}
 	
 	public void DeselectTile(Vector3Int cubeCoordinates) {
