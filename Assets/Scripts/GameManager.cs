@@ -82,12 +82,14 @@ public class GameManager : Singleton<GameManager> {
 		GridManager.Instance.DeselectAllTiles();
 		GemPlacementManager.Instance.RemoveGem(from);
 		GemPlacementManager.Instance.PutGem(CurrentPlayer, to);
+		GemPlacementManager.Instance.SwapGemsAround(CurrentPlayer, to);
 		SwitchPlayer();
 	}
 
 	private void DoSplitMove(Vector3Int from, Vector3Int to) {
 		GridManager.Instance.DeselectAllTiles();
 		GemPlacementManager.Instance.PutGem(CurrentPlayer, to);
+		GemPlacementManager.Instance.SwapGemsAround(CurrentPlayer, to);
 		SwitchPlayer();
 	}
 

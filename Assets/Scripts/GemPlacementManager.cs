@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -41,4 +41,14 @@ public class GemPlacementManager : Singleton<GemPlacementManager> {
 		return _gems.ContainsKey(cubeCoordinates) ? _gems[cubeCoordinates] : GemType.None;
 	}
 
+	public void SwapGemsAround(GemType gemType, Vector3Int cubeCoordinates) {
+		var neighbours = CoordinateUtils.Neighbours(cubeCoordinates);
+		foreach (var neighbour in neighbours) {
+			var gemTypeAt = GemTypeAt(neighbour);
+			if (gemTypeAt != GemType.None && gemTypeAt != gemType) {
+				RemoveGem(neighbour);
+				PutGem(gemType, neighbour);
+			}
+		}
+	}
 }
