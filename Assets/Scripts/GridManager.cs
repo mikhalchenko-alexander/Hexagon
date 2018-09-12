@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 
 public class GridManager : Singleton<GridManager> {
@@ -27,19 +26,21 @@ public class GridManager : Singleton<GridManager> {
 		SpawnStartingGems();
 	}
 
-	public void SelectGemTile(Vector3Int cubeCoordinates, GemType gemType) {
-		switch (gemType) {
-			case GemType.Blue:
-				SetTile(cubeCoordinates, _blueBorderHexTile);
-				break;
-			case GemType.Red:
-				SetTile(cubeCoordinates, _redBorderHexTile);
-				break;
-		}
+	public void SelectGemTile(Vector3Int centerCubeCoordinates, GemType gemType) {
+		var colouredBorderTile = gemType == GemType.Blue ? _blueBorderHexTile : _redBorderHexTile;
+		SetTile(centerCubeCoordinates, colouredBorderTile);
 
-		var neighbours = CoordinateUtils.Neighbours(cubeCoordinates).Where(_boardTilesCubeCoordinates.Contains).ToList();
+		var neighbours = CoordinateUtils.Neighbours(centerCubeCoordinates).Where(_boardTilesCubeCoordinates.Contains).ToList();
 		foreach (var cubeCoord in neighbours) {
 			SetTile(cubeCoord, _borderHexTile);
+		}
+
+		var jumpNeighbours = neighbours.SelectMany(CoordinateUtils.Neighbours)
+			.Where(cell => _boardTilesCubeCoordinates.Contains(cell) && !neighbours.Contains(cell) &&
+			               centerCubeCoordinates != cell);
+		
+		foreach (var cubeCoord in jumpNeighbours) {
+			SetTile(cubeCoord, colouredBorderTile);
 		}
 	}
 
