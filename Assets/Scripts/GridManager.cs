@@ -30,16 +30,20 @@ public class GridManager : Singleton<GridManager> {
 		var colouredBorderTile = gemType == GemType.Blue ? _blueBorderHexTile : _redBorderHexTile;
 		SetTile(centerCubeCoordinates, colouredBorderTile);
 
-		var neighbours = CoordinateUtils.Neighbours(centerCubeCoordinates).Where(_boardTilesCubeCoordinates.Contains).ToList();
-		foreach (var cubeCoord in neighbours) {
-			SetTile(cubeCoord, _borderHexTile);
-		}
-
+		var neighbours = CoordinateUtils.Neighbours(centerCubeCoordinates)
+			.Where(_boardTilesCubeCoordinates.Contains).ToList();
+		
 		var jumpNeighbours = neighbours.SelectMany(CoordinateUtils.Neighbours)
 			.Where(cell => _boardTilesCubeCoordinates.Contains(cell) && !neighbours.Contains(cell) &&
 			               centerCubeCoordinates != cell);
 		
-		foreach (var cubeCoord in jumpNeighbours) {
+		var emptyNeighbours = neighbours.Where(cell => GemPlacementManager.Instance.GemTypeAt(cell) == GemType.None);
+		var emptyJumpNeighbours = jumpNeighbours.Where(cell => GemPlacementManager.Instance.GemTypeAt(cell) == GemType.None);
+		
+		foreach (var cubeCoord in emptyNeighbours) {
+			SetTile(cubeCoord, _borderHexTile);
+		}
+		foreach (var cubeCoord in emptyJumpNeighbours) {
 			SetTile(cubeCoord, colouredBorderTile);
 		}
 	}
