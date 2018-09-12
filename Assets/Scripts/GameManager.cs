@@ -1,8 +1,13 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager> {
 
+	[SerializeField] private TextMeshProUGUI _redGemCountText;
+	[SerializeField] private TextMeshProUGUI _blueGemCountText;
+	
 	private int _blueGemsCount;
 	private int _redGemsCount;
 
@@ -12,6 +17,22 @@ public class GameManager : Singleton<GameManager> {
 
 	public GemType CurrentPlayer {
 		get { return _currentPlayer; }
+	}
+
+	public int BlueGemsCount {
+		get { return _blueGemsCount; }
+		set {
+			_blueGemsCount = value;
+			_blueGemCountText.text = value.ToString();
+		}
+	}
+
+	public int RedGemsCount {
+		get { return _redGemsCount; }
+		set {
+			_redGemsCount = value;
+			_redGemCountText.text = value.ToString();
+		}
 	}
 
 	public void SwitchPlayer() {
@@ -32,10 +53,10 @@ public class GameManager : Singleton<GameManager> {
 	public void GemAdded(GemType gemType) {
 		switch (gemType) {
 			case GemType.Blue:
-				_blueGemsCount++;
+				BlueGemsCount++;
 				break;
 			case GemType.Red:
-				_redGemsCount++;
+				RedGemsCount++;
 				break;
 			default:
 				throw new ArgumentOutOfRangeException("gemType", gemType, null);
@@ -45,10 +66,10 @@ public class GameManager : Singleton<GameManager> {
 	public void GemRemoved(GemType gemType) {
 		switch (gemType) {
 			case GemType.Blue:
-				_blueGemsCount--;
+				BlueGemsCount--;
 				break;
 			case GemType.Red:
-				_redGemsCount--;
+				RedGemsCount--;
 				break;
 			default:
 				throw new ArgumentOutOfRangeException("gemType", gemType, null);
