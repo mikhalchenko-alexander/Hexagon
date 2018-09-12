@@ -1,7 +1,6 @@
 ﻿using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager> {
 
@@ -15,11 +14,7 @@ public class GameManager : Singleton<GameManager> {
 
 	private Vector3Int? _selectedTile;
 
-	public GemType CurrentPlayer {
-		get { return _currentPlayer; }
-	}
-
-	public int BlueGemsCount {
+	private int BlueGemsCount {
 		get { return _blueGemsCount; }
 		set {
 			_blueGemsCount = value;
@@ -27,7 +22,7 @@ public class GameManager : Singleton<GameManager> {
 		}
 	}
 
-	public int RedGemsCount {
+	private int RedGemsCount {
 		get { return _redGemsCount; }
 		set {
 			_redGemsCount = value;
@@ -102,15 +97,15 @@ public class GameManager : Singleton<GameManager> {
 	private void DoJumpMove(Vector3Int from, Vector3Int to) {
 		GridManager.Instance.DeselectAllTiles();
 		GemPlacementManager.Instance.RemoveGem(from);
-		GemPlacementManager.Instance.PutGem(CurrentPlayer, to);
-		GemPlacementManager.Instance.SwapGemsAround(CurrentPlayer, to);
+		GemPlacementManager.Instance.PutGem(_currentPlayer, to);
+		GemPlacementManager.Instance.SwapGemsAround(_currentPlayer, to);
 		SwitchPlayer();
 	}
 
 	private void DoSplitMove(Vector3Int from, Vector3Int to) {
 		GridManager.Instance.DeselectAllTiles();
-		GemPlacementManager.Instance.PutGem(CurrentPlayer, to);
-		GemPlacementManager.Instance.SwapGemsAround(CurrentPlayer, to);
+		GemPlacementManager.Instance.PutGem(_currentPlayer, to);
+		GemPlacementManager.Instance.SwapGemsAround(_currentPlayer, to);
 		SwitchPlayer();
 	}
 

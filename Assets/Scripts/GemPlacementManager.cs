@@ -8,8 +8,8 @@ public class GemPlacementManager : Singleton<GemPlacementManager> {
 	[SerializeField] private Tilemap _tilemap;
 	[SerializeField] private Gem _gemPrefab;
 
-	private Dictionary<Vector3Int, GemType> _gems = new Dictionary<Vector3Int, GemType>();
-	private Dictionary<Vector3Int, Gem> _gemInstances = new Dictionary<Vector3Int, Gem>();
+	private readonly Dictionary<Vector3Int, GemType> _gems = new Dictionary<Vector3Int, GemType>();
+	private readonly Dictionary<Vector3Int, Gem> _gemInstances = new Dictionary<Vector3Int, Gem>();
 	
 	public void PutGem(GemType gemType, Vector3Int cubeCoordinates) {
 		var offsetCoords = CoordinateUtils.CubeToOffset(cubeCoordinates);

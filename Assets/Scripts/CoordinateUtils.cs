@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoordinateUtils {
+public static class CoordinateUtils {
     public static Vector3Int OffsetToCube(Vector3Int offset) {
         var x = offset.y;
         var z = -offset.x - (offset.y + (offset.y & 1)) / 2;

@@ -14,7 +14,7 @@ public class GridManager : Singleton<GridManager> {
 	[SerializeField] private TileBase _redGemTile;
 	[SerializeField] private TileBase _blueGemTile;
 
-	private List<Vector3Int> _boardTilesCubeCoordinates = new List<Vector3Int>();
+	private readonly List<Vector3Int> _boardTilesCubeCoordinates = new List<Vector3Int>();
 	private Tilemap _board;
 
 	public Tilemap Board {
