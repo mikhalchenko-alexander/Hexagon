@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -30,11 +30,14 @@ public class GemPlacementManager : Singleton<GemPlacementManager> {
 		gem.transform.position = _tilemap.GetCellCenterWorld(offsetCoords);
 		_gems[cubeCoordinates] = gemType;
 		_gemInstances[cubeCoordinates] = gem;
+		GameManager.Instance.GemAdded(gemType);
 	}
 	
 	public void RemoveGem(Vector3Int cubeCoordinates) {
+		var gemTypeAt = GemTypeAt(cubeCoordinates);
 		_gems.Remove(cubeCoordinates);
 		Destroy(_gemInstances[cubeCoordinates].gameObject);
+		GameManager.Instance.GemRemoved(gemTypeAt);
 	}
 
 	public GemType GemTypeAt(Vector3Int cubeCoordinates) {
