@@ -74,6 +74,8 @@ public class GameManager : Singleton<GameManager> {
 	}
 
 	public void TileClicked(Vector3Int cubeCoordinates) {
+		if (_currentPlayer == GemType.None) return;
+
 		if (GemPlacementManager.Instance.GemTypeAt(cubeCoordinates) == _currentPlayer) {
 			GridManager.Instance.DeselectAllTiles();
 			GridManager.Instance.SelectGemTile(cubeCoordinates, _currentPlayer);
