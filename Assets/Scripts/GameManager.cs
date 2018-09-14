@@ -1,6 +1,7 @@
 ﻿using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager> {
 
@@ -79,6 +80,10 @@ public class GameManager : Singleton<GameManager> {
 		} else if (_selectedTile != null && CurrentPlayerCanMoveTo(_selectedTile.Value, cubeCoordinates)) {
 			DoMove(_selectedTile.Value, cubeCoordinates);
 		}
+	}
+
+	public void BackToMenu() {
+		SceneManager.LoadScene("Menu");
 	}
 
 	private void DoMove(Vector3Int from, Vector3Int to) {
