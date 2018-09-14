@@ -100,17 +100,15 @@ public class GameManager : Singleton<GameManager> {
 	}
 
 	private void CheckWinner() {
-		var emptyCellCount = GridManager.Instance.CellCount() - _redGemsCount + _blueGemsCount;
-		if (emptyCellCount > 0 &&
-		    _redGemsCount > 0 &&
-		    _blueGemsCount > 0) return;
-
-		if (_redGemsCount > _blueGemsCount) {
-			FinishGame(GemType.Red);
-		} else if (_blueGemsCount > _redGemsCount) {
-			FinishGame(GemType.Blue);
-		} else {
-			FinishGame(GemType.None);
+		var emptyCellCount = GridManager.Instance.CellCount() - (_redGemsCount + _blueGemsCount);
+		if (emptyCellCount == 0 || _redGemsCount == 0 || _blueGemsCount == 0) {
+			if (_redGemsCount > _blueGemsCount) {
+				FinishGame(GemType.Red);
+			} else if (_blueGemsCount > _redGemsCount) {
+				FinishGame(GemType.Blue);
+			} else {
+				FinishGame(GemType.None);
+			}
 		}
 	}
 
