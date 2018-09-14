@@ -30,14 +30,11 @@ public class GemPlacementManager : Singleton<GemPlacementManager> {
 		_gems[cubeCoordinates] = gem;
 		GameManager.Instance.GemAdded(gemType);
 	}
-
-	public int GemCount() {
-		return _gems.Count;
-	}
 	
 	public void RemoveGem(Vector3Int cubeCoordinates) {
 		var gemTypeAt = GemTypeAt(cubeCoordinates);
 		Destroy(_gems[cubeCoordinates].gameObject);
+		_gems.Remove(cubeCoordinates);
 		GameManager.Instance.GemRemoved(gemTypeAt);
 	}
 
