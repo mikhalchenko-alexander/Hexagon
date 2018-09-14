@@ -8,8 +8,7 @@ public class GemPlacementManager : Singleton<GemPlacementManager> {
 	[SerializeField] private Tilemap _tilemap;
 	[SerializeField] private Gem _gemPrefab;
 
-	private readonly Dictionary<Vector3Int, GemType> _gems = new Dictionary<Vector3Int, GemType>();
-	private readonly Dictionary<Vector3Int, Gem> _gemInstances = new Dictionary<Vector3Int, Gem>();
+	private readonly Dictionary<Vector3Int, Gem> _gems = new Dictionary<Vector3Int, Gem>();
 	
 	public void PutGem(GemType gemType, Vector3Int cubeCoordinates) {
 		var offsetCoords = CoordinateUtils.CubeToOffset(cubeCoordinates);
@@ -28,20 +27,22 @@ public class GemPlacementManager : Singleton<GemPlacementManager> {
 		}
 		
 		gem.transform.position = _tilemap.GetCellCenterWorld(offsetCoords);
-		_gems[cubeCoordinates] = gemType;
-		_gemInstances[cubeCoordinates] = gem;
+		_gems[cubeCoordinates] = gem;
 		GameManager.Instance.GemAdded(gemType);
+	}
+
+	public int GemCount() {
+		return _gems.Count;
 	}
 	
 	public void RemoveGem(Vector3Int cubeCoordinates) {
 		var gemTypeAt = GemTypeAt(cubeCoordinates);
-		_gems.Remove(cubeCoordinates);
-		Destroy(_gemInstances[cubeCoordinates].gameObject);
+		Destroy(_gems[cubeCoordinates].gameObject);
 		GameManager.Instance.GemRemoved(gemTypeAt);
 	}
 
 	public GemType GemTypeAt(Vector3Int cubeCoordinates) {
-		return _gems.ContainsKey(cubeCoordinates) ? _gems[cubeCoordinates] : GemType.None;
+		return _gems.ContainsKey(cubeCoordinates) ? _gems[cubeCoordinates].GemType : GemType.None;
 	}
 
 	public void SwapGemsAround(GemType gemType, Vector3Int cubeCoordinates) {

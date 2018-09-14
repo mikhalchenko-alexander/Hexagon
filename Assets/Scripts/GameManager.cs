@@ -7,6 +7,7 @@ public class GameManager : Singleton<GameManager> {
 
 	[SerializeField] private TextMeshProUGUI _redGemCountText;
 	[SerializeField] private TextMeshProUGUI _blueGemCountText;
+	[SerializeField] private WinnerBoard _winnerBoard;
 	
 	private int _blueGemsCount;
 	private int _redGemsCount;
@@ -90,13 +91,33 @@ public class GameManager : Singleton<GameManager> {
 		switch (CoordinateUtils.CubeDistance(from, to)) {
 			case 1:
 				DoSplitMove(from, to);
+				CheckWinner();
 				break;
 			case 2:
 				DoJumpMove(from, to);
 				break;
 		}
+	}
 
-		
+	private void CheckWinner() {
+		var emptyCellCount = GridManager.Instance.CellCount() - _redGemsCount + _blueGemsCount;
+		if (emptyCellCount > 0 &&
+		    _redGemsCount > 0 &&
+		    _blueGemsCount > 0) return;
+
+		if (_redGemsCount > _blueGemsCount) {
+			FinishGame(GemType.Red);
+		} else if (_blueGemsCount > _redGemsCount) {
+			FinishGame(GemType.Blue);
+		} else {
+			FinishGame(GemType.None);
+		}
+	}
+
+	private void FinishGame(GemType winner) {
+		_currentPlayer = GemType.None;
+		_winnerBoard.Show();
+		_winnerBoard.SetWinner(winner);
 	}
 
 	private void DoJumpMove(Vector3Int from, Vector3Int to) {

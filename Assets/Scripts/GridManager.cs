@@ -26,6 +26,10 @@ public class GridManager : Singleton<GridManager> {
 		SpawnStartingGems();
 	}
 
+	public int CellCount() {
+		return _boardTilesCubeCoordinates.Count;
+	}
+
 	public void SelectGemTile(Vector3Int centerCubeCoordinates, GemType gemType) {
 		var colouredBorderTile = gemType == GemType.Blue ? _blueBorderHexTile : _redBorderHexTile;
 		SetTile(centerCubeCoordinates, colouredBorderTile);

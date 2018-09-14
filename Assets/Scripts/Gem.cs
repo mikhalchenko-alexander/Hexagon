@@ -31,19 +31,24 @@ public class Gem : MonoBehaviour {
 	}
 
 	private GemType _gemType = GemType.None;
+
+	public GemType GemType {
+		get { return _gemType; }
+		set { _gemType = value; }
+	}
 	
 	public void SetRed() {
 		_glowRenderer.sprite = _gemGlowRed;
 		_bgRenderer.sprite = _gemBgRed;
 		_gemRenderer.sprite = _gemRed;
-		_gemType = GemType.Red;
+		GemType = GemType.Red;
 	}
 	
 	public void SetBlue() {
 		_glowRenderer.sprite = _gemGlowBlue;
 		_bgRenderer.sprite = _gemBgBlue;
 		_gemRenderer.sprite = _gemBlue;
-		_gemType = GemType.Blue;
+		GemType = GemType.Blue;
 	}
 
 }
