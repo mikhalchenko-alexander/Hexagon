@@ -19,22 +19,6 @@ public class GameManager : Singleton<GameManager> {
 
 	private Vector3Int? _selectedTile;
 
-	private int BlueGemsCount {
-		get { return _blueGemsCount; }
-		set {
-			_blueGemsCount = value;
-			_blueGemCountText.text = value.ToString();
-		}
-	}
-
-	private int RedGemsCount {
-		get { return _redGemsCount; }
-		set {
-			_redGemsCount = value;
-			_redGemCountText.text = value.ToString();
-		}
-	}
-
 	public void SwitchPlayer() {
 		switch (_currentPlayer) {
 			case GemType.Blue:
@@ -50,13 +34,17 @@ public class GameManager : Singleton<GameManager> {
 		_selectedTile = null;
 	}
 	
+	public void BoardInitialized() {
+		UpdateGemCountersText();
+	}
+	
 	public void GemAdded(GemType gemType) {
 		switch (gemType) {
 			case GemType.Blue:
-				BlueGemsCount++;
+				_blueGemsCount++;
 				break;
 			case GemType.Red:
-				RedGemsCount++;
+				_redGemsCount++;
 				break;
 			default:
 				throw new ArgumentOutOfRangeException("gemType", gemType, null);
@@ -66,10 +54,10 @@ public class GameManager : Singleton<GameManager> {
 	public void GemRemoved(GemType gemType) {
 		switch (gemType) {
 			case GemType.Blue:
-				BlueGemsCount--;
+				_blueGemsCount--;
 				break;
 			case GemType.Red:
-				RedGemsCount--;
+				_redGemsCount--;
 				break;
 			default:
 				throw new ArgumentOutOfRangeException("gemType", gemType, null);
@@ -96,14 +84,19 @@ public class GameManager : Singleton<GameManager> {
 		switch (CoordinateUtils.CubeDistance(from, to)) {
 			case 1:
 				yield return DoSplitMove(from, to);
+				UpdateGemCountersText();
 				CheckWinner();
 				break;
 			case 2:
 				yield return DoJumpMove(from, to);
+				UpdateGemCountersText();
 				break;
 		}
+	}
 
-		yield return null;
+	private void UpdateGemCountersText() {
+		_redGemCountText.text = _redGemsCount.ToString();
+		_blueGemCountText.text = _blueGemsCount.ToString();
 	}
 
 	private void CheckWinner() {

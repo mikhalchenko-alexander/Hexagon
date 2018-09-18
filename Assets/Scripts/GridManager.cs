@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -23,7 +24,7 @@ public class GridManager : Singleton<GridManager> {
 
 	void Start () {
 		ReadBoard();
-		SpawnStartingGems();
+		StartCoroutine(SpawnStartingGems());
 	}
 
 	public int CellCount() {
@@ -87,7 +88,7 @@ public class GridManager : Singleton<GridManager> {
 		}
 	}
 	
-	private void SpawnStartingGems() {
+	private IEnumerator SpawnStartingGems() {
 		var tilemaps = _grid.GetComponentsInChildren<Tilemap>();
 		Tilemap startingPoints = null;
 		foreach (var tileMap in tilemaps) {
@@ -102,18 +103,26 @@ public class GridManager : Singleton<GridManager> {
 
 		startingPoints.CompressBounds();
 
+		var coroutines = new List<Coroutine>();
+		
 		foreach (var position in startingPoints.cellBounds.allPositionsWithin) {
 			var cubeCoord = CoordinateUtils.OffsetToCube(position);
 			
 			if (startingPoints.GetTile(position) == _redGemTile) {
-				StartCoroutine(GemPlacementManager.Instance.PutGem(GemType.Red, cubeCoord));
+				coroutines.Add(StartCoroutine(GemPlacementManager.Instance.PutGem(GemType.Red, cubeCoord)));
 			}
 			if (startingPoints.GetTile(position) == _blueGemTile) {
-				StartCoroutine(GemPlacementManager.Instance.PutGem(GemType.Blue, cubeCoord));
+				coroutines.Add(StartCoroutine(GemPlacementManager.Instance.PutGem(GemType.Blue, cubeCoord)));
 			}
 		}
 		
 		Destroy(startingPoints.gameObject);
+		
+		foreach (var coroutine in coroutines) {
+			yield return coroutine;
+		}
+
+		GameManager.Instance.BoardInitialized();
 	}
 
 	public void DeselectAllTiles() {
