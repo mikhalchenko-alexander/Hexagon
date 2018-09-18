@@ -106,10 +106,10 @@ public class GridManager : Singleton<GridManager> {
 			var cubeCoord = CoordinateUtils.OffsetToCube(position);
 			
 			if (startingPoints.GetTile(position) == _redGemTile) {
-				GemPlacementManager.Instance.PutGem(GemType.Red, cubeCoord);
+				StartCoroutine(GemPlacementManager.Instance.PutGem(GemType.Red, cubeCoord));
 			}
 			if (startingPoints.GetTile(position) == _blueGemTile) {
-				GemPlacementManager.Instance.PutGem(GemType.Blue, cubeCoord);
+				StartCoroutine(GemPlacementManager.Instance.PutGem(GemType.Blue, cubeCoord));
 			}
 		}
 		

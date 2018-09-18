@@ -127,18 +127,18 @@ public class GameManager : Singleton<GameManager> {
 
 	private IEnumerator DoJumpMove(Vector3Int from, Vector3Int to) {
 		GridManager.Instance.DeselectAllTiles();
-		GemPlacementManager.Instance.RemoveGem(from);
-		GemPlacementManager.Instance.PutGem(_currentPlayer, to);
+		yield return GemPlacementManager.Instance.RemoveGem(from);
+		yield return GemPlacementManager.Instance.PutGem(_currentPlayer, to);
 		yield return AnimateHexPins(to);
-		GemPlacementManager.Instance.SwapGemsAround(_currentPlayer, to);
+		yield return GemPlacementManager.Instance.SwapGemsAround(_currentPlayer, to);
 		SwitchPlayer();
 	}
 
 	private IEnumerator DoSplitMove(Vector3Int from, Vector3Int to) {
 		GridManager.Instance.DeselectAllTiles();
-		GemPlacementManager.Instance.PutGem(_currentPlayer, to);
+		yield return GemPlacementManager.Instance.PutGem(_currentPlayer, to);
 		yield return AnimateHexPins(to);
-		GemPlacementManager.Instance.SwapGemsAround(_currentPlayer, to);
+		yield return GemPlacementManager.Instance.SwapGemsAround(_currentPlayer, to);
 		SwitchPlayer();
 	}
 

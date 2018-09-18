@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,28 +9,30 @@ public class GemPlacementManager : Singleton<GemPlacementManager> {
 
 	private readonly Dictionary<Vector3Int, Gem> _gems = new Dictionary<Vector3Int, Gem>();
 	
-	public void PutGem(GemType gemType, Vector3Int cubeCoordinates) {
+	public IEnumerator PutGem(GemType gemType, Vector3Int cubeCoordinates) {
 		var gem = Instantiate(_gemPrefab);
-
+		gem.transform.position = GridManager.Instance.GetTileCenterPosition(cubeCoordinates);
+		_gems[cubeCoordinates] = gem;
+		
 		switch (gemType) {
-			case GemType.Blue:
-				gem.SetBlue();
+			case GemType.Blue: case GemType.Red:
+				yield return gem.SetGemType(gemType);
 				break;
-			case GemType.Red:
-				gem.SetRed();
-				break;
+			
 			default:
 				throw new ArgumentOutOfRangeException("gemType", gemType, null);
 		}
 		
-		gem.transform.position = GridManager.Instance.GetTileCenterPosition(cubeCoordinates);
-		_gems[cubeCoordinates] = gem;
 		GameManager.Instance.GemAdded(gemType);
 	}
 	
-	public void RemoveGem(Vector3Int cubeCoordinates) {
+	public IEnumerator RemoveGem(Vector3Int cubeCoordinates) {
 		var gemTypeAt = GemTypeAt(cubeCoordinates);
-		Destroy(_gems[cubeCoordinates].gameObject);
+		var gem = _gems[cubeCoordinates];
+
+		yield return gem.AnimateDisappear();
+		
+		Destroy(gem.gameObject);
 		_gems.Remove(cubeCoordinates);
 		GameManager.Instance.GemRemoved(gemTypeAt);
 	}
@@ -38,13 +41,13 @@ public class GemPlacementManager : Singleton<GemPlacementManager> {
 		return _gems.ContainsKey(cubeCoordinates) ? _gems[cubeCoordinates].GemType : GemType.None;
 	}
 
-	public void SwapGemsAround(GemType gemType, Vector3Int cubeCoordinates) {
+	public IEnumerator SwapGemsAround(GemType gemType, Vector3Int cubeCoordinates) {
 		var neighbours = CoordinateUtils.Neighbours(cubeCoordinates);
 		foreach (var neighbour in neighbours) {
 			var gemTypeAt = GemTypeAt(neighbour);
 			if (gemTypeAt != GemType.None && gemTypeAt != gemType) {
-				RemoveGem(neighbour);
-				PutGem(gemType, neighbour);
+				yield return RemoveGem(neighbour);
+				yield return PutGem(gemType, neighbour);
 			}
 		}
 	}

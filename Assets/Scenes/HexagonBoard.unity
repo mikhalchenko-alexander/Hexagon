@@ -1985,7 +1985,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfaefd91550e3497993d8920d2a0bc7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tilemap: {fileID: 972960366}
   _gemPrefab: {fileID: 2113676875}
 --- !u!4 &1039613066
 Transform:
@@ -3884,3 +3883,4 @@ MonoBehaviour:
   _gemGlowBlue: {fileID: 21300000, guid: 98ede783f9c7e4466a78c1d618bc83ad, type: 3}
   _gemBgBlue: {fileID: 21300000, guid: 7aebd04762514417abaffc76f7d40f32, type: 3}
   _gemBlue: {fileID: 21300000, guid: bce123db2c5fb4216a2cd5d8c06b2165, type: 3}
+  _animationTime: 1
