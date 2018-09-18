@@ -30,7 +30,7 @@ public class Gem : MonoBehaviour {
 		_bgRenderer = FindRenderer("Background");
 		_gemRenderer = FindRenderer("Gem");
 		_maxScale = transform.localScale.y;
-		transform.localScale = new Vector3(transform.localScale.x, 0, transform.localScale.z);
+		transform.localScale = new Vector3(_minScale, transform.localScale.y, transform.localScale.z);
 	}
 
 	private SpriteRenderer FindRenderer(String rendererName) {
@@ -59,24 +59,23 @@ public class Gem : MonoBehaviour {
 		_bgRenderer.sprite = gemType == GemType.Red ? _gemBgRed : _gemBgBlue;
 		_gemRenderer.sprite = gemType == GemType.Red ? _gemRed : _gemBlue;
 		
-		transform.localScale = new Vector3(transform.localScale.x, 0, transform.localScale.z);
+		transform.localScale = new Vector3(_minScale, transform.localScale.y, transform.localScale.z);
 		var time = 0f;
 		var currentScale = _minScale;
-		
 		while (currentScale < _maxScale) {
 			time += Time.deltaTime;
 			
 			currentScale = _maxScale * time / _animationTime;
 			currentScale = currentScale > _maxScale ? _maxScale : currentScale;
 			
-			transform.localScale = new Vector3(transform.localScale.x, currentScale, transform.localScale.z);
+			transform.localScale = new Vector3(currentScale, transform.localScale.y, transform.localScale.z);
 			
 			yield return null;
 		}
 	}
 	
 	public IEnumerator AnimateDisappear() {
-		transform.localScale = new Vector3(transform.localScale.x, _maxScale, transform.localScale.z);
+		transform.localScale = new Vector3(_maxScale, transform.localScale.y, transform.localScale.z);
 		var time = 0f;
 		var currentScale = _maxScale;
 		
@@ -86,7 +85,7 @@ public class Gem : MonoBehaviour {
 			currentScale = _maxScale - _maxScale * time / _animationTime;
 			currentScale = currentScale < _minScale ? _minScale : currentScale;
 			
-			transform.localScale = new Vector3(transform.localScale.x, currentScale, transform.localScale.z);
+			transform.localScale = new Vector3(currentScale, transform.localScale.y, transform.localScale.z);
 			
 			yield return null;
 		}

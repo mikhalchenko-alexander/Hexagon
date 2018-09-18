@@ -235,7 +235,7 @@ MonoBehaviour:
   _bluePinSprite: {fileID: 21300000, guid: bde71a2b8d8ca4efb8385e1c087e10d8, type: 3}
   _minScale: 0
   _maxScale: 0.16
-  _animationTime: 0.2
+  _animationTime: 0.1
 --- !u!212 &212064956270812390
 SpriteRenderer:
   m_ObjectHideFlags: 1

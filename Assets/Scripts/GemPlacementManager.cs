@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GemPlacementManager : Singleton<GemPlacementManager> {
@@ -42,13 +43,19 @@ public class GemPlacementManager : Singleton<GemPlacementManager> {
 	}
 
 	public IEnumerator SwapGemsAround(GemType gemType, Vector3Int cubeCoordinates) {
-		var neighbours = CoordinateUtils.Neighbours(cubeCoordinates);
-		foreach (var neighbour in neighbours) {
-			var gemTypeAt = GemTypeAt(neighbour);
-			if (gemTypeAt != GemType.None && gemTypeAt != gemType) {
-				yield return RemoveGem(neighbour);
-				yield return PutGem(gemType, neighbour);
-			}
+		var neighboursToSwap = CoordinateUtils.Neighbours(cubeCoordinates)
+			.Where(n => {
+				var gemTypeAt = GemTypeAt(n);
+				return gemTypeAt != GemType.None && gemTypeAt != gemType;
+			})
+			.ToList();
+
+		foreach (var coroutine in neighboursToSwap.Select(n => StartCoroutine(RemoveGem(n))).ToList()) {
+			yield return coroutine;
+		}
+		
+		foreach (var coroutine in neighboursToSwap.Select(n => StartCoroutine(PutGem(gemType, n))).ToList()) {
+			yield return coroutine;
 		}
 	}
 }
