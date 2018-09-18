@@ -61,6 +61,10 @@ public class GridManager : Singleton<GridManager> {
 		_board.SetTile(CoordinateUtils.CubeToOffset(cubeCoordinates), _hexTile);
 	}
 
+	public Vector3 GetTileCenterPosition(Vector3Int cubeCoordinates) {
+		return Board.GetCellCenterWorld(CoordinateUtils.CubeToOffset(cubeCoordinates));
+	}
+
 	private void ReadBoard() {
 		var tilemaps = _grid.GetComponentsInChildren<Tilemap>();
 		foreach (var tileMap in tilemaps) {

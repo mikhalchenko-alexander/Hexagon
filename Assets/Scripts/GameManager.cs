@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,6 +10,7 @@ public class GameManager : Singleton<GameManager> {
 	[SerializeField] private TextMeshProUGUI _redGemCountText;
 	[SerializeField] private TextMeshProUGUI _blueGemCountText;
 	[SerializeField] private WinnerBoard _winnerBoard;
+	[SerializeField] private HexPins _hexPinsPrefab;
 	
 	private int _blueGemsCount;
 	private int _redGemsCount;
@@ -81,7 +84,7 @@ public class GameManager : Singleton<GameManager> {
 			GridManager.Instance.SelectGemTile(cubeCoordinates, _currentPlayer);
 			_selectedTile = cubeCoordinates;
 		} else if (_selectedTile != null && CurrentPlayerCanMoveTo(_selectedTile.Value, cubeCoordinates)) {
-			DoMove(_selectedTile.Value, cubeCoordinates);
+			StartCoroutine(DoMove(_selectedTile.Value, cubeCoordinates));
 		}
 	}
 
@@ -89,16 +92,18 @@ public class GameManager : Singleton<GameManager> {
 		SceneManager.LoadScene("Menu");
 	}
 
-	private void DoMove(Vector3Int from, Vector3Int to) {
+	private IEnumerator DoMove(Vector3Int from, Vector3Int to) {
 		switch (CoordinateUtils.CubeDistance(from, to)) {
 			case 1:
-				DoSplitMove(from, to);
+				yield return DoSplitMove(from, to);
 				CheckWinner();
 				break;
 			case 2:
-				DoJumpMove(from, to);
+				yield return DoJumpMove(from, to);
 				break;
 		}
+
+		yield return null;
 	}
 
 	private void CheckWinner() {
@@ -120,19 +125,40 @@ public class GameManager : Singleton<GameManager> {
 		_winnerBoard.SetWinner(winner);
 	}
 
-	private void DoJumpMove(Vector3Int from, Vector3Int to) {
+	private IEnumerator DoJumpMove(Vector3Int from, Vector3Int to) {
 		GridManager.Instance.DeselectAllTiles();
 		GemPlacementManager.Instance.RemoveGem(from);
 		GemPlacementManager.Instance.PutGem(_currentPlayer, to);
+		yield return AnimateHexPins(to);
 		GemPlacementManager.Instance.SwapGemsAround(_currentPlayer, to);
 		SwitchPlayer();
 	}
 
-	private void DoSplitMove(Vector3Int from, Vector3Int to) {
+	private IEnumerator DoSplitMove(Vector3Int from, Vector3Int to) {
 		GridManager.Instance.DeselectAllTiles();
 		GemPlacementManager.Instance.PutGem(_currentPlayer, to);
+		yield return AnimateHexPins(to);
 		GemPlacementManager.Instance.SwapGemsAround(_currentPlayer, to);
 		SwitchPlayer();
+	}
+
+	private IEnumerator AnimateHexPins(Vector3Int cubeCoordinates) {
+		var neighbours = CoordinateUtils.Neighbours(cubeCoordinates);
+
+		var directions = neighbours.Where(n => GemPlacementManager.Instance.GemTypeAt(n) != GemType.None &&
+		                                       GemPlacementManager.Instance.GemTypeAt(n) != _currentPlayer)
+			.Select(n => CoordinateUtils.GetDirection(cubeCoordinates, n))
+			.ToList();
+
+		if (directions.Count == 0) {
+			yield return null;
+		} else {
+			yield return Instantiate(
+					_hexPinsPrefab,
+					GridManager.Instance.GetTileCenterPosition(cubeCoordinates),
+					Quaternion.identity)
+				.Animate(directions, _currentPlayer);
+		}
 	}
 
 	private bool CurrentPlayerCanMoveTo(Vector3Int from, Vector3Int to) {

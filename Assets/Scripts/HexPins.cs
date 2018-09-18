@@ -4,10 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum Direction {
-	Top, TopRight, BottomRight, Bottom, BottomLeft, TopLeft
-}
-
 public class HexPins : MonoBehaviour {
 
 	[SerializeField] private Sprite _redPinSprite;
@@ -18,7 +14,7 @@ public class HexPins : MonoBehaviour {
 	
 	private Dictionary<Direction, GameObject> _pins = new Dictionary<Direction, GameObject>();
 
-	void Start() {
+	void Awake() {
 		foreach (var d in Enum.GetValues(typeof(Direction)).Cast<Direction>()) {
 			var pin = transform.Find(d.ToString()).gameObject;
 			_pins.Add(d, pin);
@@ -52,6 +48,7 @@ public class HexPins : MonoBehaviour {
 			yield return null;
 		}
 
+		Destroy(gameObject);
 		yield return null;
 	}
 	

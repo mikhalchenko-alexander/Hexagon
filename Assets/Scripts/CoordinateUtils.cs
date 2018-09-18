@@ -32,4 +32,17 @@ public static class CoordinateUtils {
     public static int CubeDistance(Vector3Int a, Vector3Int b) {
         return (Math.Abs(a.x - b.x) + Math.Abs(a.y - b.y) + Math.Abs(a.z - b.z)) / 2;
     }
+
+    public static Direction GetDirection(Vector3Int from, Vector3Int to) {
+        if (from.x == to.x) {
+            return from.y > to.y ? Direction.Bottom : Direction.Top;
+        } 
+        
+        if (from.y == to.y) {
+            return from.x > to.x ? Direction.BottomLeft : Direction.TopRight;
+        } 
+        
+        // from.z == to.z
+        return from.x > to.x ? Direction.TopLeft : Direction.BottomRight;
+    }
 }

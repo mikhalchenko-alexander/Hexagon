@@ -697,6 +697,8 @@ MonoBehaviour:
   _redGemCountText: {fileID: 1242208593}
   _blueGemCountText: {fileID: 77855730}
   _winnerBoard: {fileID: 1858146855}
+  _hexPinsPrefab: {fileID: 114623264847808024, guid: 9731d953b6a704df3acaf14b3798afdc,
+    type: 2}
 --- !u!1 &363291244
 GameObject:
   m_ObjectHideFlags: 0
@@ -1559,15 +1561,6 @@ Tilemap:
       m_ObjectToInstantiate: {fileID: 0}
       m_TileFlags: 1
       m_ColliderType: 1
-  - first: {x: -1, y: -1, z: 0}
-    second:
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_ObjectToInstantiate: {fileID: 0}
-      m_TileFlags: 1
-      m_ColliderType: 1
   - first: {x: 0, y: -1, z: 0}
     second:
       m_TileIndex: 0
@@ -1649,15 +1642,6 @@ Tilemap:
       m_ObjectToInstantiate: {fileID: 0}
       m_TileFlags: 1
       m_ColliderType: 1
-  - first: {x: 1, y: 0, z: 0}
-    second:
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_ObjectToInstantiate: {fileID: 0}
-      m_TileFlags: 1
-      m_ColliderType: 1
   - first: {x: 2, y: 0, z: 0}
     second:
       m_TileIndex: 0
@@ -1704,15 +1688,6 @@ Tilemap:
       m_TileFlags: 1
       m_ColliderType: 1
   - first: {x: -2, y: 1, z: 0}
-    second:
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_ObjectToInstantiate: {fileID: 0}
-      m_TileFlags: 1
-      m_ColliderType: 1
-  - first: {x: -1, y: 1, z: 0}
     second:
       m_TileIndex: 0
       m_TileSpriteIndex: 0
@@ -1921,7 +1896,7 @@ Tilemap:
       m_ColliderType: 1
   m_AnimatedTiles: {}
   m_TileAssetArray:
-  - m_RefCount: 61
+  - m_RefCount: 58
     m_Data: {fileID: 11400000, guid: 596ff30f9b2ec49b8b05a70984e465cc, type: 2}
   - m_RefCount: 0
     m_Data: {fileID: 0}
@@ -1930,7 +1905,7 @@ Tilemap:
   - m_RefCount: 0
     m_Data: {fileID: 0}
   m_TileSpriteArray:
-  - m_RefCount: 61
+  - m_RefCount: 58
     m_Data: {fileID: 21300000, guid: 3dab787e01dbc4027b77ebfa7941fe58, type: 3}
   - m_RefCount: 0
     m_Data: {fileID: 0}
@@ -1939,7 +1914,7 @@ Tilemap:
   - m_RefCount: 0
     m_Data: {fileID: 0}
   m_TileMatrixArray:
-  - m_RefCount: 61
+  - m_RefCount: 58
     m_Data:
       e00: 1
       e01: 0
@@ -1958,7 +1933,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 61
+  - m_RefCount: 58
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -3716,7 +3691,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 243.79639}
+  m_SizeDelta: {x: 0, y: 243.81812}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2047986000
 MonoBehaviour:

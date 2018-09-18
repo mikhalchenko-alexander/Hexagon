@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 public class GemPlacementManager : Singleton<GemPlacementManager> {
 	
-	[SerializeField] private Tilemap _tilemap;
 	[SerializeField] private Gem _gemPrefab;
 
 	private readonly Dictionary<Vector3Int, Gem> _gems = new Dictionary<Vector3Int, Gem>();
 	
 	public void PutGem(GemType gemType, Vector3Int cubeCoordinates) {
-		var offsetCoords = CoordinateUtils.CubeToOffset(cubeCoordinates);
-		
 		var gem = Instantiate(_gemPrefab);
 
 		switch (gemType) {
@@ -26,7 +22,7 @@ public class GemPlacementManager : Singleton<GemPlacementManager> {
 				throw new ArgumentOutOfRangeException("gemType", gemType, null);
 		}
 		
-		gem.transform.position = _tilemap.GetCellCenterWorld(offsetCoords);
+		gem.transform.position = GridManager.Instance.GetTileCenterPosition(cubeCoordinates);
 		_gems[cubeCoordinates] = gem;
 		GameManager.Instance.GemAdded(gemType);
 	}
