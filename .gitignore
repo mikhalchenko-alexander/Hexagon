@@ -4,6 +4,8 @@
 [Bb]uild/
 [Bb]uilds/
 Assets/AssetStoreTools*
+Assets/Universal Sound FX*
+Assets/Ultimate Game Music Collection*
 
 # Visual Studio cache directory
 .vs/
