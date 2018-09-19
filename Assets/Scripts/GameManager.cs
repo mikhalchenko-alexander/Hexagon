@@ -59,6 +59,7 @@ public class GameManager : Singleton<GameManager> {
 
 	public void TileClicked(Vector3Int cubeCoordinates) {
 		if (_currentPlayer == GemType.None) return;
+		if (!CanMoveFrom(cubeCoordinates)) return;
 
 		if (GemPlacementManager.Instance.GemTypeAt(cubeCoordinates) == _currentPlayer) {
 			GridManager.Instance.DeselectAllTiles();
@@ -90,7 +91,8 @@ public class GameManager : Singleton<GameManager> {
 	}
 
 	private void HighlightCurrentPlayerGems() {
-		var highlightCoordinates = GemPlacementManager.Instance.GetGemCoordinates(_currentPlayer);
+		var highlightCoordinates = GemPlacementManager.Instance.GetGemCoordinates(_currentPlayer)
+			.Where(CanMoveFrom).ToList();
 		GridManager.Instance.ShowCellBorders(highlightCoordinates);
 	}
 
