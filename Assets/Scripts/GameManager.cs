@@ -28,6 +28,7 @@ public class GameManager : Singleton<GameManager> {
 	
 	public void BoardInitialized() {
 		UpdateGemCountersText();
+		HighlightCurrentPlayerGems();
 	}
 	
 	public void GemAdded(GemType gemType) {
@@ -85,6 +86,12 @@ public class GameManager : Singleton<GameManager> {
 		UpdateGemCountersText();
 		CheckWinner();
 		SwitchPlayer();
+		HighlightCurrentPlayerGems();
+	}
+
+	private void HighlightCurrentPlayerGems() {
+		var highlightCoordinates = GemPlacementManager.Instance.GetGemCoordinates(_currentPlayer);
+		GridManager.Instance.ShowCellBorders(highlightCoordinates);
 	}
 
 	private void UpdateGemCountersText() {

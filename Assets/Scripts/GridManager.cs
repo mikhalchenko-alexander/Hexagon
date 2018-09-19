@@ -135,4 +135,10 @@ public class GridManager : Singleton<GridManager> {
 		return _boardTilesCubeCoordinates.Contains(cubeCoordinate);
 	}
 
+	public void ShowCellBorders(List<Vector3Int> cubeCoordinates) {
+		foreach (var cubeCoordinate in cubeCoordinates) {
+			Board.SetTile(CoordinateUtils.CubeToOffset(cubeCoordinate), _borderHexTile);
+		}
+	}
+
 }
