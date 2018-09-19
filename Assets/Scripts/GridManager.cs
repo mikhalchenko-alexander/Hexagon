@@ -130,4 +130,9 @@ public class GridManager : Singleton<GridManager> {
 			DeselectTile(cubeCoordinates);
 		}
 	}
+
+	public bool CellInBounds(Vector3Int cubeCoordinate) {
+		return _boardTilesCubeCoordinates.Contains(cubeCoordinate);
+	}
+
 }

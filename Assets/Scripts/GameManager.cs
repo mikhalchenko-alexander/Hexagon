@@ -20,17 +20,9 @@ public class GameManager : Singleton<GameManager> {
 	private Vector3Int? _selectedTile;
 
 	public void SwitchPlayer() {
-		switch (_currentPlayer) {
-			case GemType.Blue:
-				_currentPlayer = GemType.Red;
-				break;
-			case GemType.Red:
-				_currentPlayer = GemType.Blue;
-				break;
-			default:
-				throw new ArgumentOutOfRangeException();
-		}
+		if (_currentPlayer == GemType.None) return;
 
+		_currentPlayer = _currentPlayer == GemType.Red ? GemType.Blue : GemType.Red;
 		_selectedTile = null;
 	}
 	
@@ -84,14 +76,15 @@ public class GameManager : Singleton<GameManager> {
 		switch (CoordinateUtils.CubeDistance(from, to)) {
 			case 1:
 				yield return DoSplitMove(to);
-				UpdateGemCountersText();
-				CheckWinner();
 				break;
 			case 2:
 				yield return DoJumpMove(from, to);
-				UpdateGemCountersText();
 				break;
 		}
+		
+		UpdateGemCountersText();
+		CheckWinner();
+		SwitchPlayer();
 	}
 
 	private void UpdateGemCountersText() {
@@ -100,8 +93,7 @@ public class GameManager : Singleton<GameManager> {
 	}
 
 	private void CheckWinner() {
-		var emptyCellCount = GridManager.Instance.CellCount() - (_redGemsCount + _blueGemsCount);
-		if (emptyCellCount == 0 || _redGemsCount == 0 || _blueGemsCount == 0) {
+		if (BoardHasNoEmptyCell() || AnyPlayerHasNoGems()) {
 			if (_redGemsCount > _blueGemsCount) {
 				FinishGame(GemType.Red);
 			} else if (_blueGemsCount > _redGemsCount) {
@@ -109,7 +101,34 @@ public class GameManager : Singleton<GameManager> {
 			} else {
 				FinishGame(GemType.None);
 			}
+		} else if (!NextPlayerHasMoves()) {
+			FinishGame(_currentPlayer);
 		}
+	}
+
+	private bool BoardHasNoEmptyCell() {
+		return GridManager.Instance.CellCount() - (_redGemsCount + _blueGemsCount) == 0;
+	}
+
+	private bool AnyPlayerHasNoGems() {
+		return _redGemsCount == 0 || _blueGemsCount == 0;
+	}
+
+	private bool NextPlayerHasMoves() {
+		var nextPlayer = _currentPlayer == GemType.Red ? GemType.Blue : GemType.Red;
+
+		var nextPlayerGemPositions = GemPlacementManager.Instance.GetGemCoordinates(nextPlayer);
+		return nextPlayerGemPositions.Any(CanMoveFrom);
+	}
+
+	private bool CanMoveFrom(Vector3Int pos) {
+		var neighbours = CoordinateUtils.Neighbours(pos).Where(GridManager.Instance.CellInBounds).ToList();
+		if (neighbours.Any(n => GemPlacementManager.Instance.GemTypeAt(n) == GemType.None)) {
+			return true;
+		}
+
+		var jumpNeighbours = neighbours.SelectMany(CoordinateUtils.Neighbours).Where(GridManager.Instance.CellInBounds);
+		return jumpNeighbours.Any(n => GemPlacementManager.Instance.GemTypeAt(n) == GemType.None);
 	}
 
 	private void FinishGame(GemType winner) {
@@ -124,7 +143,6 @@ public class GameManager : Singleton<GameManager> {
 		yield return GemPlacementManager.Instance.PutGem(_currentPlayer, to);
 		yield return AnimateHexPins(to);
 		yield return GemPlacementManager.Instance.SwapGemsAround(_currentPlayer, to);
-		SwitchPlayer();
 	}
 
 	private IEnumerator DoSplitMove(Vector3Int to) {
@@ -132,7 +150,6 @@ public class GameManager : Singleton<GameManager> {
 		yield return GemPlacementManager.Instance.PutGem(_currentPlayer, to);
 		yield return AnimateHexPins(to);
 		yield return GemPlacementManager.Instance.SwapGemsAround(_currentPlayer, to);
-		SwitchPlayer();
 	}
 
 	private IEnumerator AnimateHexPins(Vector3Int cubeCoordinates) {

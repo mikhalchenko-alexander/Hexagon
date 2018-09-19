@@ -62,4 +62,9 @@ public class GemPlacementManager : Singleton<GemPlacementManager> {
 	public List<Gem> GetGems() {
 		return _gems.Values.ToList();
 	}
+
+	public List<Vector3Int> GetGemCoordinates(GemType gemType) {
+		return _gems.Where(g => g.Value.GemType == gemType).Select(g => g.Key).ToList();
+	}
+
 }
