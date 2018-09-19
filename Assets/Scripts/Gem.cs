@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public enum GemType {
 	Blue, Red, None
@@ -24,13 +25,20 @@ public class Gem : MonoBehaviour {
 	private SpriteRenderer _gemRenderer;
 	private float _minScale = 0f;
 	private float _maxScale;
+	private Animator _sparkleAnimator;
 	
 	void Awake () {
 		_glowRenderer = FindRenderer("Glow");
 		_bgRenderer = FindRenderer("Background");
 		_gemRenderer = FindRenderer("Gem");
+		_sparkleAnimator = GetComponentInChildren<Animator>();
 		_maxScale = transform.localScale.y;
 		transform.localScale = new Vector3(_minScale, transform.localScale.y, transform.localScale.z);
+	}
+
+	public void PlaySparkleAnimation() {
+		var anim = Random.Range(1, 4);
+		_sparkleAnimator.SetTrigger("SparkleAnimation" + anim);
 	}
 
 	private SpriteRenderer FindRenderer(String rendererName) {
@@ -54,7 +62,7 @@ public class Gem : MonoBehaviour {
 		yield return AnimateAppear(gemType);
 	}
 
-	public IEnumerator AnimateAppear(GemType gemType) {
+	private IEnumerator AnimateAppear(GemType gemType) {
 		_glowRenderer.sprite = gemType == GemType.Red ? _gemGlowRed : _gemGlowBlue;
 		_bgRenderer.sprite = gemType == GemType.Red ? _gemBgRed : _gemBgBlue;
 		_gemRenderer.sprite = gemType == GemType.Red ? _gemRed : _gemBlue;

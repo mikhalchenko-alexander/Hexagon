@@ -83,7 +83,7 @@ public class GameManager : Singleton<GameManager> {
 	private IEnumerator DoMove(Vector3Int from, Vector3Int to) {
 		switch (CoordinateUtils.CubeDistance(from, to)) {
 			case 1:
-				yield return DoSplitMove(from, to);
+				yield return DoSplitMove(to);
 				UpdateGemCountersText();
 				CheckWinner();
 				break;
@@ -127,7 +127,7 @@ public class GameManager : Singleton<GameManager> {
 		SwitchPlayer();
 	}
 
-	private IEnumerator DoSplitMove(Vector3Int from, Vector3Int to) {
+	private IEnumerator DoSplitMove(Vector3Int to) {
 		GridManager.Instance.DeselectAllTiles();
 		yield return GemPlacementManager.Instance.PutGem(_currentPlayer, to);
 		yield return AnimateHexPins(to);

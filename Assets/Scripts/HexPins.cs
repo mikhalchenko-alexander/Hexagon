@@ -12,7 +12,7 @@ public class HexPins : MonoBehaviour {
 	[SerializeField] private float _maxScale;
 	[SerializeField] private float _animationTime;
 	
-	private Dictionary<Direction, GameObject> _pins = new Dictionary<Direction, GameObject>();
+	private readonly Dictionary<Direction, GameObject> _pins = new Dictionary<Direction, GameObject>();
 
 	void Awake() {
 		foreach (var d in Enum.GetValues(typeof(Direction)).Cast<Direction>()) {

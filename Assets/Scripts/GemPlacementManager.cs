@@ -58,4 +58,8 @@ public class GemPlacementManager : Singleton<GemPlacementManager> {
 			yield return coroutine;
 		}
 	}
+
+	public List<Gem> GetGems() {
+		return _gems.Values.ToList();
+	}
 }
