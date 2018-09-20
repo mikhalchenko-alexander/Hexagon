@@ -42,12 +42,11 @@ public class EffectsManager : Singleton<EffectsManager> {
 	}
 
 	public void PlayAppearSound() {
-		Debug.Log("Appear");
+		_audioSource.pitch = 1 + Random.Range(-0.2f, 0.2f);
 		_audioSource.PlayOneShot(_gemAppearSound);
 	}
 	
 	public void PlayDisappearSound() {
-		Debug.Log("Disappear");
 		_audioSource.PlayOneShot(_gemDisappearSound);
 	}
 
