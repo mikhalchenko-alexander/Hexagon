@@ -196,7 +196,7 @@ MonoBehaviour:
   _gemGlowBlue: {fileID: 21300000, guid: 98ede783f9c7e4466a78c1d618bc83ad, type: 3}
   _gemBgBlue: {fileID: 21300000, guid: 7aebd04762514417abaffc76f7d40f32, type: 3}
   _gemBlue: {fileID: 21300000, guid: bce123db2c5fb4216a2cd5d8c06b2165, type: 3}
-  _animationTime: 0.1
+  _animationTime: 0.2
 --- !u!212 &212290746834750210
 SpriteRenderer:
   m_ObjectHideFlags: 1

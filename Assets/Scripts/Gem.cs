@@ -52,17 +52,11 @@ public class Gem : MonoBehaviour {
 		set { _gemType = value; }
 	}
 
-	public IEnumerator SetGemType(GemType gemType) {
-		if (GemType != GemType.None) {
-			yield return AnimateDisappear();
-		}
-		
+	public void SetGemType(GemType gemType) {
 		GemType = gemType;
-		
-		yield return AnimateAppear(gemType);
 	}
 
-	private IEnumerator AnimateAppear(GemType gemType) {
+	public IEnumerator AnimateAppear(GemType gemType) {
 		_glowRenderer.sprite = gemType == GemType.Red ? _gemGlowRed : _gemGlowBlue;
 		_bgRenderer.sprite = gemType == GemType.Red ? _gemBgRed : _gemBgBlue;
 		_gemRenderer.sprite = gemType == GemType.Red ? _gemRed : _gemBlue;
@@ -86,7 +80,6 @@ public class Gem : MonoBehaviour {
 		transform.localScale = new Vector3(_maxScale, transform.localScale.y, transform.localScale.z);
 		var time = 0f;
 		var currentScale = _maxScale;
-		
 		while (currentScale > _minScale) {
 			time += Time.deltaTime;
 			

@@ -1,13 +1,21 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class EffectsManager : MonoBehaviour {
+public class EffectsManager : Singleton<EffectsManager> {
 
 	[SerializeField] private float _sparkleAnimationPeriod;
 	[SerializeField] private int _sparkleAnimationCount;
 
+	[SerializeField] private AudioClip _gemAppearSound;
+	[SerializeField] private AudioClip _gemDisappearSound;
+
 	private float _sparkleTimer;
-	
+	private AudioSource _audioSource;
+
+	private void Start() {
+		_audioSource = GetComponent<AudioSource>();
+	}
+
 	void Update () {
 		_sparkleTimer += Time.deltaTime;
 
@@ -32,4 +40,15 @@ public class EffectsManager : MonoBehaviour {
 			gems[index].PlaySparkleAnimation();
 		}
 	}
+
+	public void PlayAppearSound() {
+		Debug.Log("Appear");
+		_audioSource.PlayOneShot(_gemAppearSound);
+	}
+	
+	public void PlayDisappearSound() {
+		Debug.Log("Disappear");
+		_audioSource.PlayOneShot(_gemDisappearSound);
+	}
+
 }

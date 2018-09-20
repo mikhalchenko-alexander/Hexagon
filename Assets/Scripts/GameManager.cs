@@ -148,7 +148,9 @@ public class GameManager : Singleton<GameManager> {
 
 	private IEnumerator DoJumpMove(Vector3Int from, Vector3Int to) {
 		GridManager.Instance.DeselectAllTiles();
+		EffectsManager.Instance.PlayDisappearSound();
 		yield return GemPlacementManager.Instance.RemoveGem(from);
+		EffectsManager.Instance.PlayAppearSound();
 		yield return GemPlacementManager.Instance.PutGem(_currentPlayer, to);
 		yield return AnimateHexPins(to);
 		yield return GemPlacementManager.Instance.SwapGemsAround(_currentPlayer, to);
@@ -156,6 +158,7 @@ public class GameManager : Singleton<GameManager> {
 
 	private IEnumerator DoSplitMove(Vector3Int to) {
 		GridManager.Instance.DeselectAllTiles();
+		EffectsManager.Instance.PlayAppearSound();
 		yield return GemPlacementManager.Instance.PutGem(_currentPlayer, to);
 		yield return AnimateHexPins(to);
 		yield return GemPlacementManager.Instance.SwapGemsAround(_currentPlayer, to);

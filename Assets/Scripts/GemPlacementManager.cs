@@ -12,12 +12,13 @@ public class GemPlacementManager : Singleton<GemPlacementManager> {
 	
 	public IEnumerator PutGem(GemType gemType, Vector3Int cubeCoordinates) {
 		var gem = Instantiate(_gemPrefab);
+		gem.SetGemType(gemType);
 		gem.transform.position = GridManager.Instance.GetTileCenterPosition(cubeCoordinates);
 		_gems[cubeCoordinates] = gem;
 		
 		switch (gemType) {
 			case GemType.Blue: case GemType.Red:
-				yield return gem.SetGemType(gemType);
+				yield return gem.AnimateAppear(gemType);
 				break;
 			
 			default:
@@ -50,10 +51,14 @@ public class GemPlacementManager : Singleton<GemPlacementManager> {
 			})
 			.ToList();
 
+		if (neighboursToSwap.Count <= 0) yield break;
+		
+		EffectsManager.Instance.PlayDisappearSound();
 		foreach (var coroutine in neighboursToSwap.Select(n => StartCoroutine(RemoveGem(n))).ToList()) {
 			yield return coroutine;
 		}
-		
+
+		EffectsManager.Instance.PlayAppearSound();
 		foreach (var coroutine in neighboursToSwap.Select(n => StartCoroutine(PutGem(gemType, n))).ToList()) {
 			yield return coroutine;
 		}

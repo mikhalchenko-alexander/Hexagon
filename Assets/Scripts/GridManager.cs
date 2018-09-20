@@ -118,6 +118,7 @@ public class GridManager : Singleton<GridManager> {
 		
 		Destroy(startingPoints.gameObject);
 		
+		EffectsManager.Instance.PlayAppearSound();
 		foreach (var coroutine in coroutines) {
 			yield return coroutine;
 		}

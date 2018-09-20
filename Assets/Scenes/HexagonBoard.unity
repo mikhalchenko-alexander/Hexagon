@@ -3117,6 +3117,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sparkleAnimationPeriod: 5
   _sparkleAnimationCount: 3
+  _gemAppearSound: {fileID: 8300000, guid: 1154d6b4119e04cdeb916327a19df4a5, type: 3}
+  _gemDisappearSound: {fileID: 8300000, guid: ae50ed660e00d4e5f93dcc980419c704, type: 3}
 --- !u!4 &1758755179
 Transform:
   m_ObjectHideFlags: 0
@@ -3124,7 +3126,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1758755177}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.4234226, y: 0.51647717, z: 0.40039062}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -3139,11 +3141,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 544b11d6fd4ea4763b3027dfed422cfd, type: 3}
-  m_PlayOnAwake: 1
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -3604,7 +3606,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 244.13794}
+  m_SizeDelta: {x: 0, y: 244.3866}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2047986000
 MonoBehaviour:
