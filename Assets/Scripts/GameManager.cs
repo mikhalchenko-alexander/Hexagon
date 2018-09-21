@@ -90,6 +90,15 @@ public class GameManager : Singleton<GameManager> {
 		UpdateGemCountersText();
 		CheckWinner();
 		SwitchPlayer();
+
+		if (Settings.GameMode == GameMode.PvC && _currentPlayer == GemType.Blue) {
+			var aiMove = Ai.GetMove(
+				GridManager.Instance.Grid(),
+				GemPlacementManager.Instance.GetGemCoordinates(GemType.Red),
+				GemPlacementManager.Instance.GetGemCoordinates(GemType.Blue));
+			yield return DoMove(aiMove.From, aiMove.To);
+		}
+		
 		HighlightCurrentPlayerGems();
 		
 		_moveInProgress = false;

@@ -142,4 +142,7 @@ public class GridManager : Singleton<GridManager> {
 		}
 	}
 
+	public List<Vector3Int> Grid() {
+		return new List<Vector3Int>(_boardTilesCubeCoordinates);
+	}
 }
