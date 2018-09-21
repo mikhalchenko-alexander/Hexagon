@@ -92,10 +92,10 @@ public class GameManager : Singleton<GameManager> {
 		SwitchPlayer();
 
 		if (Settings.GameMode == GameMode.PvC && _currentPlayer == GemType.Blue) {
-			var aiMove = Ai.GetMove(
+			var aiMove = Ai.GetMove(new Board(
 				GridManager.Instance.Grid(),
 				GemPlacementManager.Instance.GetGemCoordinates(GemType.Red),
-				GemPlacementManager.Instance.GetGemCoordinates(GemType.Blue));
+				GemPlacementManager.Instance.GetGemCoordinates(GemType.Blue)));
 			yield return DoMove(aiMove.From, aiMove.To);
 		}
 		

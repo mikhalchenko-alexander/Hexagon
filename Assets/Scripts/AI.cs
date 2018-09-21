@@ -16,27 +16,39 @@ public struct AiMove {
     }
 }
 
+public struct Board {
+    public readonly List<Vector3Int> Grid;
+    public readonly List<Vector3Int> RedGems;
+    public readonly List<Vector3Int> BlueGems;
+
+    public Board(List<Vector3Int> grid, List<Vector3Int> redGems, List<Vector3Int> blueGems) {
+        Grid = grid;
+        RedGems = redGems;
+        BlueGems = blueGems;
+    }
+}
+
 public static class Ai {
 
-    public static AiMove GetMove(List<Vector3Int> grid, List<Vector3Int> redGems, List<Vector3Int> blueGems) {
-        var firstMovableGem = blueGems.First(gem => GetEmptyNeighbours(gem).Count > 0);
+    public static AiMove GetMove(Board board) {
+        var firstMovableGem = board.BlueGems.First(gem => GetEmptyNeighbours(gem, board).Count > 0);
 
-        var firstAvailableMove = GetEmptyNeighbours(firstMovableGem)[0];
+        var firstAvailableMove = GetEmptyNeighbours(firstMovableGem, board)[0];
         
         return new AiMove(firstMovableGem, firstAvailableMove);
     }
 
-    private static List<Vector3Int> GetEmptyNeighbours(Vector3Int cell) {
+    private static List<Vector3Int> GetEmptyNeighbours(Vector3Int cell, Board board) {
         var neighbours = CoordinateUtils.Neighbours(cell)
-            .Where(GridManager.Instance.CellInBounds)
+            .Where(board.Grid.Contains)
             .ToList();
 
         var jumpNeighbours = neighbours.SelectMany(CoordinateUtils.Neighbours)
-            .Where(GridManager.Instance.CellInBounds)
+            .Where(board.Grid.Contains)
             .Where(n => n != cell && !neighbours.Contains(n));
 
         var emptyNeighbours = neighbours.Concat(jumpNeighbours)
-            .Where(n => GemPlacementManager.Instance.GemTypeAt(n) == GemType.None)
+            .Where(n => !board.RedGems.Contains(n) && !board.BlueGems.Contains(n))
             .ToList();
             
         return emptyNeighbours;
