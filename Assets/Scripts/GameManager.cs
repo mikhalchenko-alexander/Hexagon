@@ -14,6 +14,7 @@ public class GameManager : Singleton<GameManager> {
 	
 	private int _blueGemsCount;
 	private int _redGemsCount;
+	private bool _moveInProgress;
 
 	private GemType _currentPlayer = GemType.Red;
 
@@ -58,14 +59,16 @@ public class GameManager : Singleton<GameManager> {
 	}
 
 	public void TileClicked(Vector3Int cubeCoordinates) {
-		if (_currentPlayer == GemType.None) return;
-		if (!CanMoveFrom(cubeCoordinates)) return;
+		if (_currentPlayer == GemType.None ||
+		    !CanMoveFrom(cubeCoordinates) ||
+		    _moveInProgress) return;
 
 		if (GemPlacementManager.Instance.GemTypeAt(cubeCoordinates) == _currentPlayer) {
 			GridManager.Instance.DeselectAllTiles();
 			GridManager.Instance.SelectGemTile(cubeCoordinates, _currentPlayer);
 			_selectedTile = cubeCoordinates;
 		} else if (_selectedTile != null && CurrentPlayerCanMoveTo(_selectedTile.Value, cubeCoordinates)) {
+			_moveInProgress = true;
 			StartCoroutine(DoMove(_selectedTile.Value, cubeCoordinates));
 		}
 	}
@@ -88,6 +91,8 @@ public class GameManager : Singleton<GameManager> {
 		CheckWinner();
 		SwitchPlayer();
 		HighlightCurrentPlayerGems();
+		
+		_moveInProgress = false;
 	}
 
 	private void HighlightCurrentPlayerGems() {
