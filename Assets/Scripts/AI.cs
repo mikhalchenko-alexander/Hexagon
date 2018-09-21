@@ -28,9 +28,7 @@ public class Board {
     }
     
     public List<Vector3Int> GetEmptyNeighbours(Vector3Int cell) {
-        var neighbours = CoordinateUtils.Neighbours(cell)
-            .Where(Grid.Contains)
-            .ToList();
+        var neighbours = ValidNeighbours(cell);
 
         var jumpNeighbours = neighbours.SelectMany(CoordinateUtils.Neighbours)
             .Where(Grid.Contains)
@@ -43,6 +41,15 @@ public class Board {
         return emptyNeighbours;
     }
 
+    public int RedGemsCountAround(Vector3Int cell) {
+        return ValidNeighbours(cell).Count(RedGems.Contains);
+    }
+
+    private List<Vector3Int> ValidNeighbours(Vector3Int cell) {
+        return CoordinateUtils.Neighbours(cell)
+            .Where(Grid.Contains)
+            .ToList();
+    }
 }
 
 public static class Ai {
@@ -53,12 +60,17 @@ public static class Ai {
 
     private static AiMove BestMove(Board board) {
         var allMoves = GetAllMoves(board);
-        var estimatedMoves = Estimate(allMoves);
-        return estimatedMoves.OrderBy(kv => kv.Value).First().Key;
+        var estimatedMoves = Estimate(board, allMoves);
+        return estimatedMoves.OrderByDescending(kv => kv.Value).First().Key;
     }
 
-    private static List<KeyValuePair<AiMove, int>> Estimate(List<AiMove> moves) {
-        return moves.Select(move => new KeyValuePair<AiMove, int>(move, 0)).ToList();
+    private static List<KeyValuePair<AiMove, int>> Estimate(Board board, List<AiMove> moves) {
+        return moves.Select(move => {
+            var value = CoordinateUtils.CubeDistance(move.From, move.To) == 1 ? 1 : 0;
+            var enemySwapCount = board.RedGemsCountAround(move.To);
+            value += enemySwapCount;
+            return new KeyValuePair<AiMove, int>(move, value);
+        }).ToList();
     }
 
     private static List<AiMove> GetAllMoves(Board board) {
