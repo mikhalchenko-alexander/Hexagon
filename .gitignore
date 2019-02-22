@@ -3,6 +3,7 @@
 [Oo]bj/
 [Bb]uild/
 [Bb]uilds/
+[Ll]ogs/
 Assets/AssetStoreTools*
 Assets/Universal Sound FX*
 Assets/Ultimate Game Music Collection*
@@ -40,3 +41,6 @@ sysinfo.txt
 # IDE
 .idea
 *.iml
+
+# OS
+.DS_Store
