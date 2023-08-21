@@ -1,0 +1,55 @@
+:root {
+  --primary-color: #5A8A3E;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+header {
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 2rem;
+  text-align: center;
+  padding: 20px 0;
+}
+
+header a {
+  color: white;
+  text-decoration: none;
+}
+
+footer {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+footer > ul {
+  list-style-type: none;
+}
+
+footer > ul > li > a {
+  color: white;
+}
+
+.wrapper {
+  min-height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+section {
+  padding: 0 20px;
+}
+
+p a {
+  color: var(--primary-color);
+}
+
